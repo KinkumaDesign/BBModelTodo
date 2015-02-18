@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         
         inputTextField.delegate = self
         
-        self._todos.on(Collection.events.ADD) {
+        self._todos.on(Collection.Event.ADD) {
             [unowned self](model, collection, options) in
             let addIndexPath = NSIndexPath(forRow: collection.length - 1, inSection: 0)
             self.todoListTableView.insertRowsAtIndexPaths([addIndexPath],
@@ -32,7 +32,7 @@ class ViewController: UIViewController {
             self.todoListTableView.scrollToRowAtIndexPath(addIndexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
         }
         
-        self._todos.on(Collection.events.REMOVE) {
+        self._todos.on(Collection.Event.REMOVE) {
             [unowned self](model, collection, options:[String:Any]?) in
             let removeIndex = options?["index"] as Int
             let removeIndexPath = NSIndexPath(forRow: removeIndex, inSection: 0)
@@ -90,10 +90,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate{
 }
 
 extension ViewController: UITextFieldDelegate{
-    func textFieldDidEndEditing(textField: UITextField) {
-        
-    }
-    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         let text = textField.text
         if let aText = text {

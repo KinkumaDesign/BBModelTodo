@@ -9,7 +9,7 @@
 import Foundation
 
 public class Collection: Events {
-    public struct events {
+    public struct Event {
         public static let ADD:String = "add"
         public static let REMOVE:String = "remove"
         public static let RESET:String = "reset"
@@ -123,7 +123,7 @@ public class Collection: Events {
         let silent = (options["silent"] ?? false) as Bool
         if silent == false {
             for addedModel in toAdd {
-                self.trigger(Collection.events.ADD, options: options, relatedObj: addedModel)
+                self.trigger(Collection.Event.ADD, options: options, relatedObj: addedModel)
             }
         }
         return aModels
@@ -150,7 +150,7 @@ public class Collection: Events {
             
             if silent == false {
                 options["index"] = index
-                self.trigger(Collection.events.REMOVE, options: options, relatedObj: model)
+                self.trigger(Collection.Event.REMOVE, options: options, relatedObj: model)
             }
         }
         return toRemove
@@ -188,7 +188,7 @@ public class Collection: Events {
         
         let silent = (options?["silent"] ?? false) as Bool
         if silent == false {
-            self.trigger(Collection.events.RESET, options: options)
+            self.trigger(Collection.Event.RESET, options: options)
         }
     }
     
@@ -243,28 +243,6 @@ public class Collection: Events {
         _byId = [String:Model]()
     }
     
-    //shallow merge
-    public func mergeDictionaries(overwrittenDictionary:[String:Any]?, dictionary:[String:Any]?, canOverwrite:Bool = true)->[String:Any]{
-        if overwrittenDictionary == nil {
-            if dictionary == nil {
-                return [String:Any]()
-            }
-            return dictionary!
-            
-        }else if dictionary == nil {
-            return overwrittenDictionary!
-            
-        }
-        var copiedOptions = overwrittenDictionary!
-        for (key, value) in dictionary! {
-            if copiedOptions[key] == nil ||
-               copiedOptions[key] != nil && canOverwrite {
-                copiedOptions[key] = value
-            }
-        }
-        return copiedOptions
-    }
-    
     public override func on(eventType:String, callback:(collection:Collection, options:[String:Any]?)->Void) -> String{
         if _events[eventType] == nil {
             _events[eventType] = [String:Any]()
@@ -285,15 +263,17 @@ public class Collection: Events {
     
     override func triggerEvents(events:[String:Any], options:[String:Any]? = nil, relatedObj:AnyObject? = nil){
         for (guid, callback) in events {
+            let mOptions = self.mergeDictionaries(options, dictionary: ["callbackId":guid], canOverwrite: false)
+            
             if let castedCallback = callback as? (model:Model, collection:Collection, options:[String:Any]?)->Void {
                 if let model = relatedObj as? Model {
-                    castedCallback(model: model, collection: self, options: options)
+                    castedCallback(model: model, collection: self, options: mOptions)
                 }
             }else if let castedCallback = (callback as? (collection:Collection, options:[String:Any]?)->Void) {
-                castedCallback(collection: self, options: options)
+                castedCallback(collection: self, options: mOptions)
                 
             }else if let castedCallback = (callback as? (events:Events, options:[String:Any]?)->Void) {
-                castedCallback(events: self, options: options)
+                castedCallback(events: self, options: mOptions)
                 
             }
         }

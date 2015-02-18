@@ -37,7 +37,21 @@ public class Events {
         return callbackID
     }
     
-    public func off(eventType:String, callbackId:String? = nil){
+    public func off(){
+        self.off(nil)
+    }
+    
+    public func off(eventType:String?, callbackId:String? = nil){
+        if eventType == nil {
+            for someEventType in _events.keys {
+                self.offWithEvent(someEventType)
+            }
+        }else{
+            self.offWithEvent(eventType!, callbackId: callbackId)
+        }
+    }
+    
+    private func offWithEvent(eventType:String, callbackId:String? = nil){
         if _events[eventType] == nil {
             return
         }
@@ -61,12 +75,16 @@ public class Events {
     
     func triggerEvents(events:[String:Any], options:[String:Any]? = nil, relatedObj:AnyObject? = nil){
         for (guid, callback) in events {
+            let mOptions = self.mergeDictionaries(options, dictionary: ["callbackId":guid], canOverwrite: false)
             if let castedCallback = (callback as? (events:Events, options:[String:Any]?)->Void) {
-                castedCallback(events: self, options: options)
+                castedCallback(events: self, options: mOptions)
             }
         }
     }
-    
+}
+
+//Utils
+public extension Events {
     //original code
     //http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
     public func generateGUID() -> String {
@@ -94,5 +112,27 @@ public class Events {
         s[23] = "-"
         
         return "".join(s)
+    }
+    
+    //shallow merge
+    public func mergeDictionaries(overwrittenDictionary:[String:Any]?, dictionary:[String:Any]?, canOverwrite:Bool = true)->[String:Any]{
+        if overwrittenDictionary == nil {
+            if dictionary == nil {
+                return [String:Any]()
+            }
+            return dictionary!
+            
+        }else if dictionary == nil {
+            return overwrittenDictionary!
+            
+        }
+        var copiedOptions = overwrittenDictionary!
+        for (key, value) in dictionary! {
+            if copiedOptions[key] == nil ||
+                (copiedOptions[key] != nil && canOverwrite) {
+                    copiedOptions[key] = value
+            }
+        }
+        return copiedOptions
     }
 }

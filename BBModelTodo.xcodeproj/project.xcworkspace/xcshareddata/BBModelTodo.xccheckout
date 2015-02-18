@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>D9096036-D058-4934-9112-990DEA3B8308</string>
+	<key>IDESourceControlProjectName</key>
+	<string>BBModelTodo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0AC6A88319BC9FD127A24CD672E3A3C05B3785BE</key>
+		<string>https://github.com/KinkumaDesign/BBModelTodo.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>BBModelTodo.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>0AC6A88319BC9FD127A24CD672E3A3C05B3785BE</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/KinkumaDesign/BBModelTodo.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>0AC6A88319BC9FD127A24CD672E3A3C05B3785BE</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0AC6A88319BC9FD127A24CD672E3A3C05B3785BE</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BBModelTodo</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -9,7 +9,7 @@
 import Foundation
 
 public class Model: Events {
-    public struct events {
+    public struct Event {
         public static let CHANGE:String = "change"
     }
     private struct uniqueIdNum {
@@ -76,12 +76,12 @@ public class Model: Events {
         }
         
         if silent == false {
-            trigger(Model.events.CHANGE, options: options)
+            trigger(Model.Event.CHANGE, options: options)
         }
     }
     
     public func set(key:String, _ attribute:Any, options:[String:Any]? = nil) {
-        self.set([key:attribute], options: nil)
+        self.set([key:attribute], options: options)
     }
     
     public func unset(key:String) {
@@ -133,11 +133,13 @@ public class Model: Events {
     
     override func triggerEvents(events:[String:Any], options:[String:Any]? = nil, relatedObj:AnyObject? = nil){
         for (guid, callback) in events {
+            let mOptions = self.mergeDictionaries(options, dictionary: ["callbackId":guid], canOverwrite: false)
+            
             if let castedCallback = callback as? (model:Model, options:[String:Any]?)->Void {
-                castedCallback(model: self, options: options)
+                castedCallback(model: self, options: mOptions)
                 
             }else if let castedCallback = callback as? (events:Events, options:[String:Any]?)->Void {
-                castedCallback(events: self, options: options)
+                castedCallback(events: self, options: mOptions)
             }
         }
     }
